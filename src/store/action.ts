@@ -1,0 +1,3 @@
+enum ActionTypes  {
+    createChat = 'creatChat',
+}
