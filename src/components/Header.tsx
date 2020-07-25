@@ -1,5 +1,15 @@
-import React from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { actions } from "../store/action";
+import { CustomLink } from "../styles/CustomLink";
 
 const Container = styled.header`
   display: flex;
@@ -15,6 +25,7 @@ const Title = styled.h2`
 `;
 
 const Button = styled.button`
+  flex: 0;
   font-size: 1rem;
   cursor: pointer;
   height: 1.5rem;
@@ -23,10 +34,49 @@ const Button = styled.button`
 `;
 
 function Header() {
+  const [name, setName] = useState("");
+  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (open && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [open]);
+
+  const onOpen = useCallback(() => {
+    setOpen(true);
+  }, []);
+
+  const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  }, []);
+  const onCreate = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (name.trim()) {
+        console.log({ name });
+        dispatch(actions.createChat(name));
+        setName("");
+        setOpen(false);
+      }
+    },
+    [dispatch, name]
+  );
+
   return (
     <Container>
-      <Title>React Chat</Title>
-      <Button>Create</Button>
+      <Title>
+        <CustomLink to="/">React Chat</CustomLink>
+      </Title>
+      {!open && <Button onClick={onOpen}>Create</Button>}
+      {open && (
+        <form onSubmit={onCreate}>
+          <input type="text" value={name} onChange={onChange} ref={inputRef} />
+          <Button type="submit">Create!</Button>
+        </form>
+      )}
     </Container>
   );
 }

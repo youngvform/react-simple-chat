@@ -15,6 +15,9 @@ const Container = styled.div`
 
 const Contents = styled.main`
   flex: 1;
+  display: flex;
+  //justify-content: center;
+  //align-items: center;
 `;
 
 function Layout({ children }: Props) {
