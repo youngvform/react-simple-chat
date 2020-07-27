@@ -1,6 +1,6 @@
 import { all, fork, takeLatest, call, put } from "redux-saga/effects";
 import useSwr, { mutate } from "swr";
-import { apiPostByUrl } from "../lib/api";
+import { apiGetByUrl, apiPostByUrl } from "../lib/api";
 
 import { actions, ActionTypes } from "./action";
 import { apiUrls } from "../lib/config";
@@ -19,12 +19,52 @@ function* createChatSaga(action: ReturnType<typeof actions.createChatRequest>) {
     yield put(actions.createChatSuccess(data));
   } catch (e) {
     console.log(e);
+    yield put(actions.createChatFailure(e.response.data));
   }
 }
 function* watchChatCreate() {
   yield takeLatest(ActionTypes.CREATE_CHAT_REQUEST, createChatSaga);
 }
 
+function* getChatsSaga() {
+  try {
+    const { data }: AxiosResponse = yield call(apiGetByUrl, apiUrls.getChats);
+    yield put(actions.getChatsSuccess(data));
+  } catch (e) {
+    console.error(e);
+    yield put(actions.getChatsFailure(e.response.data));
+  }
+}
+
+function* watchGetChats() {
+  yield takeLatest(ActionTypes.GET_CHATS_REQUEST, getChatsSaga);
+}
+
+function* getMessagesSaga(
+  action: ReturnType<typeof actions.getMessagesRequest>
+) {
+  try {
+    const { chatId } = action.payload;
+    const { data }: AxiosResponse = yield call(
+      apiGetByUrl,
+      apiUrls.getMessages(chatId)
+    );
+    yield put(actions.getMessagesSuccess(data));
+  } catch (e) {
+    console.dir(e);
+    console.error(e);
+    yield put(actions.getMessagesFailure(e.response.data));
+  }
+}
+
+function* watchGetMessages() {
+  yield takeLatest(ActionTypes.GET_MESSAGES_REQUEST, getMessagesSaga);
+}
+
 export default function* chatSaga() {
-  yield all([fork(watchChatCreate)]);
+  yield all([
+    fork(watchChatCreate),
+    fork(watchGetChats),
+    fork(watchGetMessages),
+  ]);
 }

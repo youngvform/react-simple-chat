@@ -1,12 +1,12 @@
 import createError from "http-errors";
-import express, {NextFunction, Request, Response} from "express";
+import express, { NextFunction, Request, Response } from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import cors from "cors";
 
 import indexRouter from "./routes";
-import usersRouter from "./routes/users";
+import messageRouter from "./routes/message";
 import chatRouter from "./routes/chat";
 
 const app = express();
@@ -28,7 +28,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/message", messageRouter);
 app.use("/chat", chatRouter);
 
 // catch 404 and forward to error handler

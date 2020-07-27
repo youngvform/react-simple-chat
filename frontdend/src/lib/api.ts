@@ -16,3 +16,6 @@ export async function apiPostByUrl(
 ) {
   return await axiosClient.post(url, params, options);
 }
+export async function apiGetByUrl(url: string, options?: AxiosRequestConfig) {
+  return await axiosClient.get(url, options);
+}

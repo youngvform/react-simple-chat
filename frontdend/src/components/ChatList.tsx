@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Chat from "./Chat";
 import { useChatState } from "../hooks/useChatState";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import { actions } from "../store/action";
 
 const Container = styled.div`
   width: 100%;
@@ -16,10 +17,11 @@ const Container = styled.div`
 `;
 
 function ChatList() {
-  const { chat } = useSelector((state: RootState) => state);
-  console.log({ chat });
   const { chatList } = useChatState();
-  console.log(chatList);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(actions.getChatsRequest());
+  }, []);
   return (
     <Container>
       {chatList.length > 0 &&
