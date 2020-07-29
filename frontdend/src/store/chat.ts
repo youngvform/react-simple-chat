@@ -7,7 +7,7 @@ export interface ChatState {
   isLoading: boolean;
   createError: string;
   getChatsError: string;
-  getMessagesError: string;
+  messagingError: string;
   chatList: ChatType[];
   messages: MessageType[];
 }
@@ -17,7 +17,7 @@ const INITIAL_STATE: ChatState = {
   createError: "",
   isLoading: false,
   getChatsError: "",
-  getMessagesError: "",
+  messagingError: "",
   messages: [],
 };
 
@@ -58,10 +58,23 @@ export default createReducer<ChatState, ActionTypes, Action>(INITIAL_STATE, {
     const { messages } = action.payload;
     state.messages = messages;
     state.isLoading = false;
-    state.getMessagesError = "";
+    state.messagingError = "";
   },
   [ActionTypes.GET_MESSAGES_FAILURE]: (state, action) => {
-    state.getMessagesError = action.payload.errorMessage;
+    state.messagingError = action.payload.errorMessage;
+    state.isLoading = false;
+  },
+  [ActionTypes.SEND_MESSAGE_REQUEST]: (state, action) => {
+    state.isLoading = true;
+  },
+  [ActionTypes.SEND_MESSAGE_SUCCESS]: (state, action) => {
+    const { message } = action.payload;
+    state.messages.push(message);
+    state.isLoading = false;
+    state.messagingError = "";
+  },
+  [ActionTypes.SEND_MESSAGE_FAILURE]: (state, action) => {
+    state.messagingError = action.payload.errorMessage;
     state.isLoading = false;
   },
 });

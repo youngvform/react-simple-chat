@@ -61,10 +61,30 @@ function* watchGetMessages() {
   yield takeLatest(ActionTypes.GET_MESSAGES_REQUEST, getMessagesSaga);
 }
 
+function* sendMessageSaga(
+  action: ReturnType<typeof actions.sendMessageRequest>
+) {
+  try {
+    const { params } = action.payload;
+    const { data }: AxiosResponse = yield call(
+      apiPostByUrl,
+      apiUrls.sendMessage,
+      { ...params }
+    );
+    yield put(actions.sendMessageSuccess(data));
+  } catch (e) {
+    yield put(actions.sendMessageFailure(e.response.data));
+  }
+}
+
+function* watchSendMessage() {
+  yield takeLatest(ActionTypes.SEND_MESSAGE_REQUEST, sendMessageSaga);
+}
 export default function* chatSaga() {
   yield all([
     fork(watchChatCreate),
     fork(watchGetChats),
     fork(watchGetMessages),
+    fork(watchSendMessage),
   ]);
 }

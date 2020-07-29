@@ -9,4 +9,5 @@ export const apiUrls = {
   createChat: `${chatApi}/create`,
   getChats: `${chatApi}/`,
   getMessages: (chatId: string) => `/message/${chatId}`,
+  sendMessage: `/message/`
 };

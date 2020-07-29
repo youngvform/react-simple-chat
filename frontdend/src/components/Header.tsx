@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { actions } from "../store/action";
 import { CustomLink } from "../styles/CustomLink";
+import { useParams } from "react-router-dom";
 
 const Container = styled.header`
   display: flex;
@@ -21,7 +22,6 @@ const Container = styled.header`
 
 const Title = styled.h2`
   flex: 1;
-  cursor: pointer;
 `;
 
 const Button = styled.button`
@@ -38,6 +38,7 @@ function Header() {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
+  const { id } = useParams();
 
   useEffect(() => {
     if (open && inputRef.current) {
@@ -69,7 +70,7 @@ function Header() {
       <Title>
         <CustomLink to="/">React Chat</CustomLink>
       </Title>
-      {!open && <Button onClick={onOpen}>Create</Button>}
+      {!id && !open && <Button onClick={onOpen}>Create</Button>}
       {open && (
         <form onSubmit={onCreate}>
           <input type="text" value={name} onChange={onChange} ref={inputRef} />

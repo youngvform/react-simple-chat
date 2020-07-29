@@ -13,7 +13,21 @@ interface Chat {
   messages?: Message[];
 }
 
-export const chats: Chat[] = [];
+export let chats: Chat[] = [];
+export function addMessage(chatId: string, messageText: string) {
+  const chat = chats.find((chat) => chat.id === chatId);
+  if (chat?.messages) {
+    const lastId = chat.messages[chat.messages.length - 1]?.id ?? 1;
+    const message = { id: lastId, message: messageText };
+    chat.messages.push(message);
+    addMessages(chatId, chat.messages);
+  }
+}
+export function addMessages(chatId: string, messages: Message[]) {
+  chats = chats.map((chat) =>
+    chat.id === chatId ? { ...chat, messages } : chat
+  );
+}
 /* GET home page. */
 router.get("/", function (req, res, next) {
   try {

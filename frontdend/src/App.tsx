@@ -9,12 +9,10 @@ import "./App.css";
 function App() {
   return (
     <BrowserRouter>
-      <Layout>
-        <Switch>
-          <Route path={`/chat/:id`} component={Room} />
-          <Route exact path="/" component={ChatList} />
-        </Switch>
-      </Layout>
+      <Switch>
+        <Route path={`/chat/:id`} component={Room} />
+        <Route exact path="/" component={ChatList} />
+      </Switch>
     </BrowserRouter>
   );
 }
