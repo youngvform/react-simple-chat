@@ -1,10 +1,12 @@
 import express from "express";
 import shortId from "shortid";
+import format from "date-fns/format";
 const router = express.Router();
 
 interface Message {
   id: number;
   message: string;
+  sendDate: string;
 }
 
 interface Chat {
@@ -17,10 +19,15 @@ export let chats: Chat[] = [];
 export function addMessage(chatId: string, messageText: string) {
   const chat = chats.find((chat) => chat.id === chatId);
   if (chat?.messages) {
-    const lastId = chat.messages[chat.messages.length - 1]?.id ?? 1;
-    const message = { id: lastId, message: messageText };
+    const lastId = (chat.messages[chat.messages.length - 1]?.id ?? 0) + 1;
+    const message = {
+      id: lastId,
+      message: messageText,
+      sendDate: format(new Date(), "MM/dd/h:m a"),
+    };
     chat.messages.push(message);
     addMessages(chatId, chat.messages);
+    return message;
   }
 }
 export function addMessages(chatId: string, messages: Message[]) {

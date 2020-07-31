@@ -31,8 +31,7 @@ router.post("/", (req, res, next) => {
     if (!chat) {
       return res.status(404).send("No Chat!");
     }
-    addMessage(chatId, messageText);
-    const message = { id: chatId, message: messageText };
+    const message = addMessage(chatId, messageText);
     return res.json(message);
   } catch (e) {
     console.error(e);

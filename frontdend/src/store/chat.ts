@@ -69,7 +69,7 @@ export default createReducer<ChatState, ActionTypes, Action>(INITIAL_STATE, {
   },
   [ActionTypes.SEND_MESSAGE_SUCCESS]: (state, action) => {
     const { message } = action.payload;
-    state.messages.push(message);
+    state.messages.push({...message, isMine: true});
     state.isLoading = false;
     state.messagingError = "";
   },

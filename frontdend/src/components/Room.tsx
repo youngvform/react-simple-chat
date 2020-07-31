@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { useChatState } from "../hooks/useChatState";
 import ErrorMessage from "../styles/ErrorMessage";
 import Header from "./Header";
+import MessageList from "./MessageList";
 
 const Container = styled.div`
   display: flex;
@@ -26,6 +27,11 @@ const Contents = styled.div`
 
 const SendLayer = styled.form`
   display: flex;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  height: 2rem;
+  background-color: white;
 `;
 
 const Input = styled.input`
@@ -58,6 +64,10 @@ function Room() {
     dispatch(actions.getMessagesRequest(id));
   }, [id]);
 
+  useEffect(() => {
+    window.scrollTo(0, document.body.scrollHeight);
+  }, [messages]);
+
   const onChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setText(e.target.value);
@@ -82,7 +92,7 @@ function Room() {
       <Header />
       <Contents>
         {messagingError && <ErrorMessage>{messagingError}</ErrorMessage>}
-        <div>{messages.map((message) => message.message)}</div>
+        <MessageList messageList={messages} />
       </Contents>
       <SendLayer onSubmit={onSubmit}>
         <Input onChange={onChange} value={text} />
