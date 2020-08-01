@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { MessageType } from "../types";
-import { is } from "immer/dist/utils/common";
+import {MessageType} from "../types";
 
 interface Props {
   messageData: MessageType;

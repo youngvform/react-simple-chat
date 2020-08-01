@@ -1,6 +1,6 @@
 import { createAction } from "./redux";
 import { ChatType, MessageType } from "../types";
-import {MessageParam} from "../lib/api";
+import { MessageParam } from "../lib/api";
 
 export enum ActionTypes {
   CREATE_CHAT_REQUEST = "chat/CREATE_CHAT_REQUEST",
@@ -15,6 +15,9 @@ export enum ActionTypes {
   SEND_MESSAGE_REQUEST = "chat/SEND_MESSAGE_REQUEST",
   SEND_MESSAGE_SUCCESS = "chat/SEND_MESSAGE_SUCCESS",
   SEND_MESSAGE_FAILURE = "chat/SEND_MESSAGE_FAILURE",
+  ADD_CHAT = "chat/ADD_CHAT",
+  ADD_MESSAGE = "chat/ADD_MESSAGE",
+  RESET_SENT_STATUS = "chat/RESET_SENT_STATUS",
 }
 
 export const actions = {
@@ -41,4 +44,8 @@ export const actions = {
     createAction(ActionTypes.SEND_MESSAGE_SUCCESS, { message }),
   sendMessageFailure: (errorMessage: string) =>
     createAction(ActionTypes.SEND_MESSAGE_FAILURE, { errorMessage }),
+  addChat: (chat: ChatType) => createAction(ActionTypes.ADD_CHAT, { chat }),
+  addMessage: (message: MessageType) =>
+    createAction(ActionTypes.ADD_MESSAGE, { message }),
+  resetSentStatus: () => createAction(ActionTypes.RESET_SENT_STATUS),
 };

@@ -1,10 +1,9 @@
-import { all, fork, takeLatest, call, put } from "redux-saga/effects";
-import useSwr, { mutate } from "swr";
-import { apiGetByUrl, apiPostByUrl } from "../lib/api";
+import {all, call, fork, put, takeLatest} from "redux-saga/effects";
+import {apiGetByUrl, apiPostByUrl} from "../lib/api";
 
-import { actions, ActionTypes } from "./action";
-import { apiUrls } from "../lib/config";
-import { AxiosResponse } from "axios";
+import {actions, ActionTypes} from "./action";
+import {apiUrls} from "../lib/config";
+import {AxiosResponse} from "axios";
 
 function* createChatSaga(action: ReturnType<typeof actions.createChatRequest>) {
   try {
